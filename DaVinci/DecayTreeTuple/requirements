@@ -1,0 +1,69 @@
+#============================================================================
+# Created    : 2007-12-05
+# Maintainer : Patrick Koppenburg
+#============================================================================
+package           DecayTreeTuple
+version           v4r4
+
+#============================================================================
+# Structure
+#============================================================================
+branches          cmt doc src python
+
+#============================================================================
+# Used packages.
+#============================================================================
+use   DecayTreeTupleBase        v*    Phys
+use   DecayTreeFitter           v*    Phys
+# Depend on the various component packages, so they get built before the
+# python stuff below.
+use   DecayTreeTupleReco        v*    Phys
+use   DecayTreeTupleDalitz      v*    Phys
+use   DecayTreeTupleJets        v*    Phys
+use   DecayTreeTupleMC          v*    Phys
+use   DecayTreeTupleTrigger     v*    Phys
+use   DecayTreeTupleMuonCalib   v*    Phys
+
+use   LoKiPhys                  v*    Phys
+use   HepMC                     v*    LCG_Interfaces
+
+# Old dependencies. Kept for a while for reference
+#use   DaVinciAssociators  v*    Phys
+#use   HltInterfaces       v*    Kernel
+#use   DecFiles            v*    Gen     --no_auto_imports
+#use   DAQEvent            v*    Event
+#use   L0Event             v*    Event
+#use   HltEvent            v*    Event
+#use   LoKiArrayFunctors   v*    Phys
+#use   MuonDet             v*    Det
+#use   ROOT                v*    LCG_Interfaces -no_auto_imports
+#use   Python              v*    LCG_Interfaces
+
+#============================================================================
+# Python
+#============================================================================
+apply_pattern    install_python_modules
+macro_append DecayTreeTupleGenConfUser_dependencies DecayTreeTupleConfDbMerge
+
+#============================================================================
+# Component library building rule
+#============================================================================
+library          DecayTreeTuple     ../src/*.cpp 
+apply_pattern    component_library  library=DecayTreeTuple
+
+#============================================================================
+# Private stuff
+#============================================================================
+#private
+# Not sure why this was added. Doesn't seem to be needed ...
+#macro_append ROOT_linkopts " -lMLP -lTMVA -lGraf -lHist -lMatrix -lTreePlayer -lGpad -lGraf3d "
+#end_private
+
+use  Python              v*  LCG_Interfaces
+use  ROOT             v*      LCG_Interfaces -no_auto_imports
+
+
+private
+macro_append   ROOT_linkopts   " -lMLP -lTMVA -lGraf -lHist -lMatrix -lTreePlayer -lGpad -lGraf3d" \
+               WIN32   " libMLP.lib libTMVA.lib libGraf.lib libHist.lib libMatrix.lib libTreePlayer.lib libGpad.lib libGraf3d.lib"
+end_private
